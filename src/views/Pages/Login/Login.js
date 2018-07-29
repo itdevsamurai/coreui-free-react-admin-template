@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { config } from '../../../constants';
 
 class Login extends Component {
 
@@ -30,7 +31,7 @@ class Login extends Component {
 
     // console.log(JSON.stringify(this.state) );
 
-    fetch('http://api.devsamurai.com/auth/local', {
+    fetch( config.baseURI + '/auth/local', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
