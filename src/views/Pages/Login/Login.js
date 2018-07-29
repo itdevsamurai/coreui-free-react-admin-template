@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Redirect } from 'react-router-dom'
 import { config } from '../../../constants';
 
 class Login extends Component {
@@ -9,6 +10,7 @@ class Login extends Component {
     this.state = {
       user_name: '',
       password: '',
+      loginMsg: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -43,13 +45,35 @@ class Login extends Component {
       }),
     })
     .then(res => res.json())
+    .catch(error => console.error('Error:', error))
     .then( res => {
-      console.log( res );
-    });
+
+
+      if (!res.statusCode) {
+        // console.log( res );
+        // console.log( 'privious token = ' +  localStorage.getItem('token') );
+        localStorage.setItem('token', res.jwt);
+
+        this.setState({ loginStatus: true });
+      }
+      else {
+        localStorage.removeItem('token');
+        // console.log( res );
+        this.setState({ loginMsg: res.message });
+      }
+    })
 
   }
 
   render() {
+
+    const { user_name, password, loginStatus, loginMsg } = this.state;
+
+    if (loginStatus) {
+      return <Redirect to='/#/dashboard'/>;
+    }
+
+
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -68,7 +92,7 @@ class Login extends Component {
                       </InputGroupAddon>
                       <Input type="text" placeholder="Username"
                         name="user_name"
-                        value={this.state.user_name}
+                        value={user_name}
                         onChange={this.handleChange}
                       />
                     </InputGroup>
@@ -80,10 +104,13 @@ class Login extends Component {
                       </InputGroupAddon>
                       <Input type="password" placeholder="Password"
                         name="password"
-                        value={this.state.password}
+                        value={password}
                         onChange={this.handleChange}
                       />
                     </InputGroup>
+                    <p className="bg-danger">{loginMsg}</p>
+
+                    
                     <Row>
                       <Col xs="6">
                         <Button color="primary" className="px-4" 
