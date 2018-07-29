@@ -2,6 +2,52 @@ import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 
 class Login extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      user_name: '',
+      password: '',
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.Login        = this.Login.bind(this);
+  }
+
+
+  handleChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+
+  Login() {
+
+    // console.log(JSON.stringify(this.state) );
+
+    fetch('http://api.devsamurai.com/auth/local', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        identifier: this.state.user_name,
+        password: this.state.password,
+      }),
+    })
+    .then(res => res.json())
+    .then( res => {
+      console.log( res );
+    });
+
+  }
+
   render() {
     return (
       <div className="app flex-row align-items-center">
@@ -19,7 +65,11 @@ class Login extends Component {
                           <i className="icon-user"></i>
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input type="text" placeholder="Username" />
+                      <Input type="text" placeholder="Username"
+                        name="user_name"
+                        value={this.state.user_name}
+                        onChange={this.handleChange}
+                      />
                     </InputGroup>
                     <InputGroup className="mb-4">
                       <InputGroupAddon addonType="prepend">
@@ -27,11 +77,17 @@ class Login extends Component {
                           <i className="icon-lock"></i>
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input type="password" placeholder="Password" />
+                      <Input type="password" placeholder="Password"
+                        name="password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                      />
                     </InputGroup>
                     <Row>
                       <Col xs="6">
-                        <Button color="primary" className="px-4">Login</Button>
+                        <Button color="primary" className="px-4" 
+                          onClick={this.Login}
+                        >Login</Button>
                       </Col>
                       <Col xs="6" className="text-right">
                         <Button color="link" className="px-0">Forgot password?</Button>
