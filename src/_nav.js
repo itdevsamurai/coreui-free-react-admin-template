@@ -10,6 +10,19 @@ export default {
       },
     },
     {
+      name: 'Setting',
+      url: '/pages',
+      icon: 'icon-star',
+      children: [
+        {
+          name: 'Category',
+          url: '/category',
+          icon: 'icon-star',
+        },
+      ],
+    },
+
+    {
       title: true,
       name: 'Theme',
       wrapper: {            // optional wrapper object

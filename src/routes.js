@@ -182,6 +182,11 @@ const User = Loadable({
   loading: Loading,
 });
 
+const Category = Loadable({
+  loader: () => import('./views/Pages/Category/Category.js'),
+  loading: Loading,
+});
+
 
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
@@ -227,6 +232,7 @@ const routes = [
   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/category', exact: true,  name: 'Categories', component: Category },
 ];
 
 export default routes;
